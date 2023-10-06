@@ -32,7 +32,9 @@ import { GiWaveCrest } from 'react-icons/gi';
 import { ColorSchemeToggle } from '@/components/ColorSchemeToggle/ColorSchemeToggle';
 import { useContext, useEffect, useState} from 'react';
 
-
+import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { useAccount } from 'wagmi'
+import { disconnect } from '@wagmi/core'
 
   
   export function MantineHeader() {
@@ -40,7 +42,8 @@ import { useContext, useEffect, useState} from 'react';
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const theme = useMantineTheme();
 
-    
+    const { open, close, } = useWeb3Modal()
+  const { address } = useAccount()
     
   
 
@@ -115,7 +118,22 @@ import { useContext, useEffect, useState} from 'react';
   
             <Group visibleFrom="sm">
               <ColorSchemeToggle/>
-           
+              {
+          !address && (
+            <Button onClick={() => open()} variant="secondary" className="mr-4">
+          Sign In
+          
+        </Button>
+          )
+        }
+        {
+          address && (
+            <Button onClick={disconnect} variant="secondary" className="mr-4">
+            Sign out
+            
+          </Button>
+          )
+        }
             </Group>
   
             <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
